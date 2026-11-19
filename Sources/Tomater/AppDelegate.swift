@@ -60,12 +60,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMe
         window.titleVisibility = .hidden
         window.isMovableByWindowBackground = true
         window.isReleasedWhenClosed = false
-        window.appearance = NSAppearance(named: .darkAqua)
-        window.backgroundColor = NSColor(Pal.bg)
+        window.backgroundColor = Pal.window
         window.contentView = NSHostingView(rootView: RootView(model: model, settings: settings))
         window.delegate = self
         window.center()
         window.setFrameAutosaveName("TomaterMainWindow")
+        watchDayAndNight()
+    }
+
+    // MARK: Day and night
+
+    /// Light look from 6:00 AM to 5:59 PM, dark look from 6:00 PM to 5:59 AM.
+    private func watchDayAndNight() {
+        applyDayOrNight()
+        let timer = Timer(timeInterval: 30, repeats: true) { [weak self] _ in
+            MainActor.assumeIsolated { self?.applyDayOrNight() }
+        }
+        RunLoop.main.add(timer, forMode: .common)
+    }
+
+    private func applyDayOrNight() {
+        let hour = Calendar.current.component(.hour, from: Date())
+        let name: NSAppearance.Name = (6..<18).contains(hour) ? .aqua : .darkAqua
+        if window.appearance?.name != name { window.appearance = NSAppearance(named: name) }
     }
 
     @objc func showWindow() {

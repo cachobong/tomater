@@ -46,7 +46,7 @@ private struct TabButton: View {
 
     var body: some View {
         Button { current = screen } label: {
-            Sprite(icon, color: selected ? Pal.ink : (hovering ? Pal.cream : Pal.dim), scale: 2)
+            Sprite(icon, color: selected ? Pal.ink : (hovering ? Pal.text : Pal.dim), scale: 2)
                 .frame(width: 32, height: 32)
         }
         .buttonStyle(PixelButtonStyle(fill: selected ? accent : Pal.panel, depth: 3))

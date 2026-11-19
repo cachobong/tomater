@@ -13,7 +13,7 @@ struct StatsView: View {
         VStack(spacing: 14) {
             HStack(spacing: 10) {
                 ScoreBox(label: "TODAY", value: model.todayCount, color: Pal.gold)
-                ScoreBox(label: "WEEK", value: thisWeek.reduce(0, +), color: Pal.cream)
+                ScoreBox(label: "WEEK", value: thisWeek.reduce(0, +), color: Pal.text)
                 ScoreBox(label: "BEST", value: best, color: Pal.tomato)
                     .help("Best day in the last two weeks")
             }
@@ -47,7 +47,7 @@ private struct ScoreBox: View {
     var body: some View {
         VStack(spacing: 8) {
             PixelText(label, color: Pal.dim)
-            PixelText(String(format: "%02d", value), scale: 4, color: color, shadow: Pal.ink)
+            PixelText(String(format: "%02d", value), scale: 4, color: color, shadow: Pal.shadow)
         }
         .padding(.vertical, 12)
         .frame(maxWidth: .infinity)
@@ -75,7 +75,7 @@ private struct WeekChart: View {
     var body: some View {
         PixelPanel {
             VStack(alignment: .leading, spacing: 10) {
-                PixelText(title, color: Pal.cream)
+                PixelText(title, color: Pal.text)
                 HStack(alignment: .bottom, spacing: 0) {
                     ForEach(0..<7, id: \.self) { day in
                         let count = counts[day]

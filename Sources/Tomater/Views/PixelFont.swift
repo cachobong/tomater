@@ -57,10 +57,10 @@ enum PixelFont {
 struct PixelText: View {
     let text: String
     var scale: CGFloat = 2
-    var color: Color = Pal.cream
+    var color: Color = Pal.text
     var shadow: Color? = nil
 
-    init(_ text: String, scale: CGFloat = 2, color: Color = Pal.cream, shadow: Color? = nil) {
+    init(_ text: String, scale: CGFloat = 2, color: Color = Pal.text, shadow: Color? = nil) {
         self.text = text
         self.scale = scale
         self.color = color

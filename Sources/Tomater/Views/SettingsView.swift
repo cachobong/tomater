@@ -71,7 +71,7 @@ private struct ToggleRow: View {
 
     var body: some View {
         HStack {
-            PixelText(label, color: isEnabled ? Pal.cream : Pal.dim)
+            PixelText(label, color: isEnabled ? Pal.text : Pal.dim)
             Spacer(minLength: 4)
             Button { isOn.toggle() } label: {
                 PixelText(isOn ? "ON" : "OFF", color: isOn ? Pal.ink : Pal.dim)

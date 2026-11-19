@@ -20,7 +20,7 @@ struct TimerView: View {
             HStack(alignment: .center) {
                 HStack(spacing: 8) {
                     PixelText("SCORE", color: Pal.dim)
-                    PixelText(String(format: "%03d", model.todayCount), color: Pal.gold, shadow: Pal.ink)
+                    PixelText(String(format: "%03d", model.todayCount), color: Pal.gold, shadow: Pal.shadow)
                 }
                 .help("Pomodoros finished today")
                 Spacer()
@@ -30,12 +30,12 @@ struct TimerView: View {
 
             Spacer(minLength: 0)
 
-            PixelText(stageTitle, scale: 3, color: accent, shadow: Pal.ink)
+            PixelText(stageTitle, scale: 3, color: accent, shadow: Pal.shadow)
 
             BobbingSprite(art: Sprites.art(for: model.phase), moving: model.isRunning)
                 .padding(.top, 14)
 
-            PixelText(model.timeString, scale: 7, color: Pal.cream, shadow: Pal.ink)
+            PixelText(model.timeString, scale: 7, color: Pal.text, shadow: Pal.shadow)
                 .padding(.top, 16)
 
             TimeBar(remaining: model.remaining, total: model.total, accent: accent, running: model.isRunning)
@@ -45,7 +45,7 @@ struct TimerView: View {
 
             HStack(spacing: 20) {
                 Button(action: model.stop) {
-                    Sprite(Sprites.stop, color: Pal.cream, scale: 3)
+                    Sprite(Sprites.stop, color: Pal.text, scale: 3)
                         .frame(width: 52, height: 52)
                 }
                 .buttonStyle(PixelButtonStyle(fill: Pal.panel))

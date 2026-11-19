@@ -1,13 +1,22 @@
 import SwiftUI
+import AppKit
 
-/// The limited 8-bit palette.
+/// The limited 8-bit palette. Some colors have a day (light) and a night (dark) value.
+/// They follow the window appearance, which changes with the time of day.
 enum Pal {
-    static let bg = Color(hex: 0x1C1A33)
-    static let panel = Color(hex: 0x2C2A52)
-    static let panelHi = Color(hex: 0x413E72)
+    static let window = adaptive(day: 0xF3E9D2, night: 0x1C1A33)
+    static let bg = Color(nsColor: window)
+    static let panel = Color(nsColor: adaptive(day: 0xFFFAEE, night: 0x2C2A52))
+    static let panelHi = Color(nsColor: adaptive(day: 0xE3D5B4, night: 0x413E72))
+    /// Main text and icon color.
+    static let text = Color(nsColor: adaptive(day: 0x2A2747, night: 0xF6ECD2))
+    static let dim = Color(nsColor: adaptive(day: 0x8A80A8, night: 0x8D88BC))
+    static let gold = Color(nsColor: adaptive(day: 0xE2A21C, night: 0xF7C948))
+    /// Drop shadow under pixel text.
+    static let shadow = Color(nsColor: adaptive(day: 0xD9C8A0, night: 0x0D0C1A))
+    static let star = Color(nsColor: adaptive(day: 0xFFFFFF, night: 0xF6ECD2))
     static let ink = Color(hex: 0x0D0C1A)
     static let cream = Color(hex: 0xF6ECD2)
-    static let dim = Color(hex: 0x8D88BC)
     static let tomato = Color(hex: 0xEF4A3C)
     static let tomatoDark = Color(hex: 0xA42A2B)
     static let blush = Color(hex: 0xFF9C8C)
@@ -15,10 +24,19 @@ enum Pal {
     static let leafDark = Color(hex: 0x2B7D43)
     static let lagoon = Color(hex: 0x42BCE0)
     static let lagoonDark = Color(hex: 0x23799A)
-    static let gold = Color(hex: 0xF7C948)
     static let brown = Color(hex: 0x8A5A3B)
     static let sand = Color(hex: 0xF1D58A)
     static let steel = Color(hex: 0xC9C6E6)
+
+    private static func adaptive(day: UInt32, night: UInt32) -> NSColor {
+        NSColor(name: nil) { appearance in
+            let isNight = appearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua
+            let hex = isNight ? night : day
+            return NSColor(srgbRed: CGFloat((hex >> 16) & 0xFF) / 255,
+                           green: CGFloat((hex >> 8) & 0xFF) / 255,
+                           blue: CGFloat(hex & 0xFF) / 255, alpha: 1)
+        }
+    }
 
     static func accent(_ phase: Phase) -> Color {
         switch phase {
@@ -112,12 +130,12 @@ struct PixelPanel<Content: View>: View {
 /// Text that blinks on and off, like an arcade attract screen.
 struct BlinkingText: View {
     let text: String
-    var color: Color = Pal.cream
+    var color: Color = Pal.text
 
     var body: some View {
         TimelineView(.periodic(from: .now, by: 0.55)) { context in
             let on = Int(context.date.timeIntervalSinceReferenceDate / 0.55) % 2 == 0
-            PixelText(text, scale: 2, color: color, shadow: Pal.ink)
+            PixelText(text, scale: 2, color: color, shadow: Pal.shadow)
                 .opacity(on ? 1 : 0)
         }
     }
@@ -138,7 +156,7 @@ struct Starfield: View {
                 let big = random() > 0.85
                 let side: CGFloat = big ? 3 : 2
                 context.fill(Path(CGRect(x: x, y: y, width: side, height: side)),
-                             with: .color(Pal.cream.opacity(big ? 0.45 : 0.18)))
+                             with: .color(Pal.star.opacity(big ? 0.45 : 0.18)))
             }
         }
     }
