@@ -40,29 +40,10 @@ NSGraphicsContext.saveGraphicsState()
 NSGraphicsContext.current = NSGraphicsContext(bitmapImageRep: rep)
 NSGraphicsContext.current?.shouldAntialias = false
 
-// Background: indigo body (macOS icon grid: 824pt inside the 1024 canvas) with stepped corners.
-let body = NSRect(x: 100, y: 100, width: 824, height: 824)
-let step: CGFloat = 32
-func steppedRect(_ r: NSRect, _ s: CGFloat) -> NSBezierPath {
-    let p = NSBezierPath()
-    p.move(to: NSPoint(x: r.minX + 3 * s, y: r.minY))
-    p.line(to: NSPoint(x: r.maxX - 3 * s, y: r.minY)); p.line(to: NSPoint(x: r.maxX - 3 * s, y: r.minY + s))
-    p.line(to: NSPoint(x: r.maxX - s, y: r.minY + s)); p.line(to: NSPoint(x: r.maxX - s, y: r.minY + 3 * s))
-    p.line(to: NSPoint(x: r.maxX, y: r.minY + 3 * s)); p.line(to: NSPoint(x: r.maxX, y: r.maxY - 3 * s))
-    p.line(to: NSPoint(x: r.maxX - s, y: r.maxY - 3 * s)); p.line(to: NSPoint(x: r.maxX - s, y: r.maxY - s))
-    p.line(to: NSPoint(x: r.maxX - 3 * s, y: r.maxY - s)); p.line(to: NSPoint(x: r.maxX - 3 * s, y: r.maxY))
-    p.line(to: NSPoint(x: r.minX + 3 * s, y: r.maxY)); p.line(to: NSPoint(x: r.minX + 3 * s, y: r.maxY - s))
-    p.line(to: NSPoint(x: r.minX + s, y: r.maxY - s)); p.line(to: NSPoint(x: r.minX + s, y: r.maxY - 3 * s))
-    p.line(to: NSPoint(x: r.minX, y: r.maxY - 3 * s)); p.line(to: NSPoint(x: r.minX, y: r.minY + 3 * s))
-    p.line(to: NSPoint(x: r.minX + s, y: r.minY + 3 * s)); p.line(to: NSPoint(x: r.minX + s, y: r.minY + s))
-    p.line(to: NSPoint(x: r.minX + 3 * s, y: r.minY + s))
-    p.close()
-    return p
-}
-color(0x0D0C1A).setFill()
-steppedRect(body, step).fill()
+// Background: indigo rounded square on the macOS icon grid (824pt inside the 1024 canvas,
+// 185pt corner radius). macOS 26 puts icons of other shapes on a gray plate.
 color(0x2C2A52).setFill()
-steppedRect(body.insetBy(dx: 16, dy: 16), step).fill()
+NSBezierPath(roundedRect: NSRect(x: 100, y: 100, width: 824, height: 824), xRadius: 185, yRadius: 185).fill()
 
 // Stars.
 let stars: [(CGFloat, CGFloat, CGFloat)] = [(200, 760, 24), (300, 840, 16), (780, 800, 24), (840, 680, 16), (180, 600, 16), (860, 300, 16)]
