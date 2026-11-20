@@ -24,6 +24,8 @@ struct SettingsView: View {
                     ToggleRow(label: "HIDE DOCK ICON", isOn: $settings.hideDockIcon)
                         .disabled(!settings.showMenuBarTimer)
                         .help(settings.showMenuBarTimer ? "" : "Turn on the menu bar timer first")
+                    ThemeRow(theme: $settings.theme)
+                        .help("AUTO: day look from 6 AM to 6 PM, night look at other times")
                 }
             }
         }
@@ -80,6 +82,27 @@ private struct ToggleRow: View {
             .buttonStyle(PixelButtonStyle(fill: isOn ? Pal.leaf : Pal.panelHi, depth: 3))
             .opacity(isEnabled ? 1 : 0.4)
             .accessibilityValue(isOn ? "On" : "Off")
+        }
+    }
+}
+
+private struct ThemeRow: View {
+    @Binding var theme: Theme
+
+    var body: some View {
+        HStack(spacing: 6) {
+            PixelText("THEME")
+            Spacer(minLength: 4)
+            ForEach(Theme.allCases, id: \.self) { option in
+                let selected = option == theme
+                Button { theme = option } label: {
+                    PixelText(option.rawValue, color: selected ? Pal.ink : Pal.dim)
+                        .padding(.horizontal, 7)
+                        .frame(height: 26)
+                }
+                .buttonStyle(PixelButtonStyle(fill: selected ? Pal.gold : Pal.panelHi, depth: 3))
+                .accessibilityAddTraits(selected ? .isSelected : [])
+            }
         }
     }
 }

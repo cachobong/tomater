@@ -1,6 +1,11 @@
 import Foundation
 import Combine
 
+/// The look of the window. `auto` is day from 6:00 AM to 5:59 PM and night at other times.
+enum Theme: String, CaseIterable {
+    case auto, day, night
+}
+
 /// User preferences, saved in UserDefaults.
 final class AppSettings: ObservableObject {
     private let defaults = UserDefaults.standard
@@ -12,6 +17,7 @@ final class AppSettings: ObservableObject {
     @Published var autostartWork: Bool { didSet { defaults.set(autostartWork, forKey: Keys.autostart) } }
     @Published var interruptMe: Bool { didSet { defaults.set(interruptMe, forKey: Keys.interrupt) } }
     @Published var hideDockIcon: Bool { didSet { defaults.set(hideDockIcon, forKey: Keys.hideDock) } }
+    @Published var theme: Theme { didSet { defaults.set(theme.rawValue, forKey: Keys.theme) } }
     @Published var showMenuBarTimer: Bool {
         didSet {
             defaults.set(showMenuBarTimer, forKey: Keys.menuBar)
@@ -29,6 +35,7 @@ final class AppSettings: ObservableObject {
         static let menuBar = "showMenuBarTimer"
         static let interrupt = "interruptMe"
         static let hideDock = "hideDockIcon"
+        static let theme = "theme"
     }
 
     init() {
@@ -50,5 +57,6 @@ final class AppSettings: ObservableObject {
         showMenuBarTimer = defaults.bool(forKey: Keys.menuBar)
         interruptMe = defaults.bool(forKey: Keys.interrupt)
         hideDockIcon = defaults.bool(forKey: Keys.hideDock) && defaults.bool(forKey: Keys.menuBar)
+        theme = Theme(rawValue: defaults.string(forKey: Keys.theme) ?? "") ?? .auto
     }
 }

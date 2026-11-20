@@ -25,7 +25,7 @@ To start it at login: System Settings → General → Login Items → add Tomate
 - "Jump on top when time's up": when a timer ends, the window comes to the front and floats above all windows until you click it. A short 8-bit jingle plays either way.
 - Stats screen: today, this week, last week.
 - Space bar starts/pauses when the window is focused.
-- Light look from 6:00 AM to 5:59 PM, dark look from 6:00 PM to 5:59 AM (follows the clock, not the system appearance).
+- Theme: AUTO uses the light look from 6:00 AM to 5:59 PM and the dark look from 6:00 PM to 5:59 AM (follows the clock, not the system appearance). DAY and NIGHT keep one look.
 
 ## Data
 

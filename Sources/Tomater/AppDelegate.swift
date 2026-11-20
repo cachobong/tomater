@@ -70,18 +70,29 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate, NSMe
 
     // MARK: Day and night
 
-    /// Light look from 6:00 AM to 5:59 PM, dark look from 6:00 PM to 5:59 AM.
+    /// The theme setting picks the look. On auto, the look is light from 6:00 AM to 5:59 PM
+    /// and dark from 6:00 PM to 5:59 AM.
     private func watchDayAndNight() {
-        applyDayOrNight()
+        settings.$theme
+            .sink { [weak self] theme in self?.applyDayOrNight(theme) }
+            .store(in: &cancellables)
         let timer = Timer(timeInterval: 30, repeats: true) { [weak self] _ in
-            MainActor.assumeIsolated { self?.applyDayOrNight() }
+            MainActor.assumeIsolated {
+                guard let self else { return }
+                self.applyDayOrNight(self.settings.theme)
+            }
         }
         RunLoop.main.add(timer, forMode: .common)
     }
 
-    private func applyDayOrNight() {
-        let hour = Calendar.current.component(.hour, from: Date())
-        let name: NSAppearance.Name = (6..<18).contains(hour) ? .aqua : .darkAqua
+    private func applyDayOrNight(_ theme: Theme) {
+        let isDay: Bool
+        switch theme {
+        case .day: isDay = true
+        case .night: isDay = false
+        case .auto: isDay = (6..<18).contains(Calendar.current.component(.hour, from: Date()))
+        }
+        let name: NSAppearance.Name = isDay ? .aqua : .darkAqua
         if window.appearance?.name != name { window.appearance = NSAppearance(named: name) }
     }
 
