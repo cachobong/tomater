@@ -6,7 +6,9 @@ struct SettingsView: View {
     var body: some View {
         VStack(spacing: 16) {
             PixelPanel {
-                VStack(spacing: 14) {
+                VStack(spacing: 11) {
+                    FocusTextRow(text: $settings.focusText)
+                        .help("Title over a focus timer. Leave it blank for FOCUS!")
                     NumberRow(label: "FOCUS", value: $settings.workMinutes, range: 1...180, unit: "MIN")
                     NumberRow(label: "BREAK", value: $settings.breakMinutes, range: 1...60, unit: "MIN")
                     NumberRow(label: "LONG BREAK", value: $settings.longBreakMinutes, range: 1...120, unit: "MIN")
@@ -15,7 +17,7 @@ struct SettingsView: View {
             }
 
             PixelPanel {
-                VStack(spacing: 14) {
+                VStack(spacing: 11) {
                     ToggleRow(label: "AUTO-START FOCUS", isOn: $settings.autostartWork)
                         .help("Start the next focus timer when a break ends")
                     ToggleRow(label: "MENU BAR TIMER", isOn: $settings.showMenuBarTimer)
@@ -63,6 +65,34 @@ private struct NumberRow: View {
         .buttonRepeatBehavior(.enabled)
         .disabled(!enabled)
         .opacity(enabled ? 1 : 0.35)
+    }
+}
+
+private struct FocusTextRow: View {
+    @Binding var text: String
+    static let maxLength = 16
+
+    var body: some View {
+        HStack(spacing: 8) {
+            PixelText("FOCUS TEXT")
+            Spacer(minLength: 4)
+            TextField("", text: $text, prompt: Text("FOCUS!").foregroundColor(Pal.dim))
+                .textFieldStyle(.plain)
+                .font(.system(size: 13, weight: .bold, design: .monospaced))
+                .foregroundColor(Pal.text)
+                .padding(.horizontal, 9)
+                .frame(width: 160, height: 26)
+                .background(PixelFrame(fill: Pal.panelHi, depth: 0))
+                .onChange(of: text) { _, new in
+                    let clean = Self.clean(new)
+                    if clean != new { text = clean }
+                }
+        }
+    }
+
+    /// Keeps only the characters the pixel font can draw, in capitals, up to `maxLength`.
+    static func clean(_ text: String) -> String {
+        String(text.uppercased().filter { PixelFont.glyphs[$0] != nil }.prefix(maxLength))
     }
 }
 

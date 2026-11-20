@@ -8,7 +8,7 @@ struct TimerView: View {
 
     private var stageTitle: String {
         switch model.phase {
-        case .work: return "FOCUS!"
+        case .work: return settings.focusTitle
         case .shortBreak: return "BREAK"
         case .longBreak: return "BONUS BREAK"
         }

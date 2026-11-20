@@ -23,6 +23,7 @@ To start it at login: System Settings → General → Login Items → add Tomate
 - Focus, break, long break lengths, and how many focus timers before a long break.
 - Breaks start by themselves. "Auto-start focus after break" starts the next focus timer when the break ends.
 - "Jump on top when time's up": when a timer ends, the window comes to the front and floats above all windows until you click it. A short 8-bit jingle plays either way.
+- Focus text: change the "FOCUS!" title in Settings. Leave it blank for "FOCUS!". Up to 16 characters: A-Z, 0-9, space and `: ! - . ' ? /`.
 - Stats screen: today, this week, last week.
 - Space bar starts/pauses when the window is focused.
 - Theme: AUTO uses the light look from 6:00 AM to 5:59 PM and the dark look from 6:00 PM to 5:59 AM (follows the clock, not the system appearance). DAY and NIGHT keep one look.

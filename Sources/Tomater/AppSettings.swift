@@ -18,6 +18,13 @@ final class AppSettings: ObservableObject {
     @Published var interruptMe: Bool { didSet { defaults.set(interruptMe, forKey: Keys.interrupt) } }
     @Published var hideDockIcon: Bool { didSet { defaults.set(hideDockIcon, forKey: Keys.hideDock) } }
     @Published var theme: Theme { didSet { defaults.set(theme.rawValue, forKey: Keys.theme) } }
+    /// Title over a focus timer. Blank means the default, "FOCUS!".
+    @Published var focusText: String { didSet { defaults.set(focusText, forKey: Keys.focusText) } }
+
+    var focusTitle: String {
+        let text = focusText.trimmingCharacters(in: .whitespaces)
+        return text.isEmpty ? "FOCUS!" : text
+    }
     @Published var showMenuBarTimer: Bool {
         didSet {
             defaults.set(showMenuBarTimer, forKey: Keys.menuBar)
@@ -36,6 +43,7 @@ final class AppSettings: ObservableObject {
         static let interrupt = "interruptMe"
         static let hideDock = "hideDockIcon"
         static let theme = "theme"
+        static let focusText = "focusText"
     }
 
     init() {
@@ -57,6 +65,7 @@ final class AppSettings: ObservableObject {
         showMenuBarTimer = defaults.bool(forKey: Keys.menuBar)
         interruptMe = defaults.bool(forKey: Keys.interrupt)
         hideDockIcon = defaults.bool(forKey: Keys.hideDock) && defaults.bool(forKey: Keys.menuBar)
+        focusText = defaults.string(forKey: Keys.focusText) ?? ""
         theme = Theme(rawValue: defaults.string(forKey: Keys.theme) ?? "") ?? .auto
     }
 }
